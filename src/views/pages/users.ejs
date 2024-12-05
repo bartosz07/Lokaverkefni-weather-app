@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users</title>
+  <link rel="stylesheet" href="/css/users.css">
+</head>
+<body>
+  <div class="navbar">
+    <div class="nav-item" onclick="showTab('userList')">User List</div>
+    <div class="nav-item" onclick="showTab('createUser')">Create User</div>
+    <div class="nav-item" onclick="redirectToIndex()">Back to home</div>
+  </div>
+
+  <div class="content">
+    <div id="userList" class="tab-content">
+      <h1>User List</h1>
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(user => { %>
+            <tr>
+              <td><%= user.id %></td>
+              <td><%= user.name %></td>
+              <td><%= user.email %></td>
+              <td>
+                <form action="/users/<%= user.id %>?_method=PUT" method="POST" class="inline-form">
+                  <input type="text" name="name" value="<%= user.name %>" required>
+                  <input type="email" name="email" value="<%= user.email %>" required>
+                  <input type="password" name="password" placeholder="New Password">
+                  <button type="submit" class="btn update-btn">Update</button>
+                </form>
+                <form action="/users/<%= user.id %>?_method=DELETE" method="POST" class="inline-form">
+                  <button type="submit" class="btn delete-btn">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="createUser" class="tab-content" style="display: none;">
+      <h1>Create User</h1>
+      <form action="/users" method="POST" class="user-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        
+        <button type="submit" class="btn submit-btn">Create</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function showTab(tabId) {
+      const tabs = document.querySelectorAll('.tab-content');
+      tabs.forEach(tab => {
+        if (tab.id === tabId) {
+          tab.style.display = 'block';
+        } else {
+          tab.style.display = 'none';
+        }
+      });
+    }
+
+    function redirectToIndex() {
+      window.location.href = '/';
+    }
+  </script>
+</body>
+</html>
